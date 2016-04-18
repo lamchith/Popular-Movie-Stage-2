@@ -4,15 +4,25 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:showIn="@layout/activity_detail"
-    tools:context=".MainActivityFragment">
+    tools:context=".MovieDetailsFragment">
     <FrameLayout android:id="@+id/fragment_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <ImageView android:id="@+id/imageView_poster" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center" />
-    <TextView android:id="@+id/textView_title" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="left|top"/>
-    <TextView android:id="@+id/textView_overview" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="right|bottom" android:padding="10dp"/>
-    <TextView android:id="@+id/textView_userRating" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="right|bottom" android:padding="10dp"/>
-    <TextView android:id="@+id/textView_releaseDate" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="right|top"  android:padding="10dp"/>
+        <LinearLayout android:layout_height="match_parent" android:layout_width="match_parent" android:orientation="vertical">
+            <TextView android:id="@+id/textView_title" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
+            <ImageView android:id="@+id/imageView_poster" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+            <TextView android:id="@+id/textView_overview" android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="10dp"/>
+            <TextView android:id="@+id/textView_userRating" android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="10dp"/>
+            <TextView android:id="@+id/textView_releaseDate" android:layout_height="wrap_content" android:layout_width="wrap_content"  android:padding="10dp"/>
+            <TextView android:id="@+id/textView_trailor" android:layout_height="wrap_content" android:layout_width="wrap_content"   android:padding="10dp"/>
+            <Button android:id="@+id/button_favourite" android:layout_width="10dp" android:layout_height="1dp" android:text="Add to Favourite" />
+            <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_trailor"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

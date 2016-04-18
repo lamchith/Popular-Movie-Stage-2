@@ -3,6 +3,8 @@ package com.lmc.popularmovie.utility;
 import android.app.Application;
 import android.content.Context;
 
+import com.lmc.popularmovie.db.DBHelper;
+
 /**
  * Created by lmarathchathu on 1/1/2016.
  */
@@ -23,5 +25,7 @@ public class MovieApplication extends Application {
             context=getApplicationContext();
 
         }
+
+        DBHelper db = new DBHelper(context);
     }
 }

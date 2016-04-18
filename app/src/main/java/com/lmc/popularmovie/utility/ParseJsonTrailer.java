@@ -13,12 +13,16 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
+ * Created by lmarathchathu on 4/16/2016.
+ */
+public class ParseJsonTrailer {
+
+/**
  * Created by lmarathchathu on 12/7/2015.
  */
-public class ParseJson {
 
-    public ArrayList<MovieDetails> parsejson(InputStream in) {
-        ArrayList<MovieDetails> list = new ArrayList<MovieDetails>();
+    public ArrayList<MovieTrailorDetails> parsejson(InputStream in) {
+        ArrayList<MovieTrailorDetails> list = new ArrayList<MovieTrailorDetails>();
 
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
@@ -30,7 +34,7 @@ public class ParseJson {
                     if (name.equals("results")) {
                         reader.beginArray();
                         while (reader.hasNext()) {
-                            readMovieDetails(reader, list);
+                            readMovieTrailorDetails(reader, list);
 
                         }
                         reader.endArray();
@@ -55,30 +59,20 @@ public class ParseJson {
     }
 
 
-    static ArrayList<MovieDetails> readMovieDetails(JsonReader reader, ArrayList<MovieDetails> details) {
+    static ArrayList<MovieTrailorDetails> readMovieTrailorDetails(JsonReader reader, ArrayList<MovieTrailorDetails> details) {
         try {
             reader.beginObject();
-            MovieDetails movie = new MovieDetails();
+            MovieTrailorDetails movie = new MovieTrailorDetails();
             while (reader.hasNext()) {
                 try {
 
                     String name = reader.nextName();
 
-                    if (name.equals("title")) {
-                        movie.title = reader.nextString();
-                    } else if (name.equals("poster_path")) {
-                        movie.moviePoster = reader.nextString();
-                    } else if (name.equals("overview")) {
-                        movie.overview = reader.nextString();
-                    } else if (name.equals("vote_average")) {
-                        movie.userRating = reader.nextString();
-                    } else if (name.equals("release_date")) {
-                        movie.releaseDate = reader.nextString();
-                    } else if (name.equals("id")) {
+                    if (name.equals("key")) {
+                        movie.key = reader.nextString();
+                    } /* else if (name.equals("id")) {
                         movie.movieId = reader.nextInt();
-                    } else if (name.equals("id")) {
-                        movie.movieId = reader.nextInt();
-                    }
+                    }*/
                     else {
                         reader.skipValue();
                     }
@@ -113,3 +107,4 @@ public class ParseJson {
 
 
 }
+

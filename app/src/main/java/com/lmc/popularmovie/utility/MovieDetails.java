@@ -22,8 +22,10 @@ public class MovieDetails {
     //release_date
     public String releaseDate;
 
+    public int movieId;
+
 
     public String toString(){
-      return   title+moviePoster+overview+userRating+releaseDate;
+      return   title+moviePoster+overview+userRating+releaseDate+" : "+movieId;
     }
 }

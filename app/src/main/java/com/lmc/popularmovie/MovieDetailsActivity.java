@@ -31,7 +31,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 // During initial setup, plug in the details fragment.
                 MovieDetailsFragment details = new MovieDetailsFragment();
                 details.setArguments(getIntent().getExtras());
-                getFragmentManager().beginTransaction().add(R.id.fragment_frame, details).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_frame, details).commit();
             }
 
         }

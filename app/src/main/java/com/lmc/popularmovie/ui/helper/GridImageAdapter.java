@@ -55,7 +55,7 @@ public class GridImageAdapter extends BaseAdapter{
         //http://image.tmdb.org/t/p/w185/
         //ImageView poster = (ImageView) view.findViewById(R.id.imageView_poster);
 
-        Picasso.with(context).load("http://image.tmdb.org/t/p/w185/"+entry.moviePoster).into(imageView);
+        Picasso.with(context).load(UIConstants.IMAGE_SIZE+entry.moviePoster).into(imageView);
 
 
 

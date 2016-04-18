@@ -5,7 +5,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:showIn="@layout/activity_movie_grid"
-    tools:context="com.lmc.popularmovie.MovieGridActivityFragment">
+    tools:context=".MovieGridFragment">
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridview"

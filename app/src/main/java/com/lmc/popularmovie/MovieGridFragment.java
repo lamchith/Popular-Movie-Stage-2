@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.lmc.popularmovie.db.DBHelper;
 import com.lmc.popularmovie.ui.helper.GridImageAdapter;
 import com.lmc.popularmovie.utility.MovieApplication;
 import com.lmc.popularmovie.utility.MovieDetails;
@@ -25,17 +26,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A placeholder fragment containing a simple view.
+ *
  */
-public class MovieGridActivityFragment extends Fragment {
+public class MovieGridFragment extends Fragment {
 
     GridView gridView;
     //ArrayList<MovieDetails> list=null;
     DownloadTask downloadTask = null;
 
-    public MovieGridActivityFragment() {
+    public MovieGridFragment() {
     }
 
     @Override
@@ -63,16 +65,33 @@ public class MovieGridActivityFragment extends Fragment {
         if (sort.equals("1")) {
             sortBy = "popularity.desc";
 
-        } else {
+        }
+        else if(sort.equals("2")) {
             sortBy = "vote_average.desc";
         }
+        else {
+            sortBy = "3";
+        }
 
-        Log.i("Lamchith", "Value from prefernce is :" + sort);
-        try {
-            // keep the movie api key here
-            downloadTask = (DownloadTask) new DownloadTask().execute(new URL("http://api.themoviedb.org/3/discover/movie?sort_by=" + sortBy + "&api_key=c1b3f30b9499e9b6dbfabec386d13288"));
-        } catch (MalformedURLException ex) {
-            Log.e("Lamchith", ex.getMessage());
+        if(!sortBy.equals("3")) {
+            Log.i("Lamchith", "Value from prefernce is :" + sort);
+            try {
+                // keep the movie api key here
+                downloadTask = (DownloadTask) new DownloadTask().execute(new URL("http://api.themoviedb.org/3/discover/movie?sort_by=" + sortBy + "&api_key="));
+            } catch (MalformedURLException ex) {
+                Log.e("Lamchith", ex.getMessage());
+
+            }
+        }
+        else{
+            // get the value from DB
+
+            DBHelper dbHelper=new DBHelper(MovieApplication.context);
+            ArrayList<MovieDetails> list= dbHelper.getMovieDetails();
+
+            populateImageGrid(list);
+
+
 
         }
     }
@@ -106,45 +125,47 @@ public class MovieGridActivityFragment extends Fragment {
 
         protected void onPostExecute(final ArrayList<MovieDetails> list) {
 
-            GridImageAdapter adapter = new GridImageAdapter(MovieApplication.context, list);
-            // this.list=list;
-            gridView.setAdapter(adapter);
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(view.getContext(), MovieDetailsActivity.class);
-                    // String detailsArray[]=new String[5];
-                    MovieDetails details = list.get(i);
-               /* detailsArray[0]=details.title;
-                detailsArray[1]=details.moviePoster;
-                detailsArray[2]=details.overview;
-                detailsArray[3]=details.userRating;
-                detailsArray[4]=details.releaseDate;*/
-                    ArrayList<String> arraylist = new ArrayList<String>();
-                    arraylist.add(details.title);
-                    arraylist.add(details.moviePoster);
-                    arraylist.add(details.overview);
-                    arraylist.add(details.userRating);
-                    arraylist.add(details.releaseDate);
-
-                    intent.putStringArrayListExtra("com.lmc.popularmovie.details", arraylist);
-
-                    //intent.putExtra("Details", detailsArray);
-                    startActivity(intent);
-                }
-            });
+            populateImageGrid(list);
 
 
         }
     }
 
+    private void populateImageGrid(final ArrayList<MovieDetails> list) {
+        GridImageAdapter adapter = new GridImageAdapter(MovieApplication.context, list);
+        // this.list=list;
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), MovieDetailsActivity.class);
+                // String detailsArray[]=new String[5];
+                MovieDetails details = list.get(i);
+           /* detailsArray[0]=details.title;
+            detailsArray[1]=details.moviePoster;
+            detailsArray[2]=details.overview;
+            detailsArray[3]=details.userRating;
+            detailsArray[4]=details.releaseDate;*/
+                ArrayList<String> arraylist = new ArrayList<String>();
+                arraylist.add(details.title);
+                arraylist.add(details.moviePoster);
+                arraylist.add(details.overview);
+                arraylist.add(details.userRating);
+                arraylist.add(details.releaseDate);
+                arraylist.add(""+details.movieId);
+                intent.putStringArrayListExtra("com.lmc.popularmovie.details", arraylist);
 
+                //intent.putExtra("Details", detailsArray);
+                startActivity(intent);
+            }
+        });
+    }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        getFragmentManager().beginTransaction().replace(R.id.movieGridActivityFragment, new MovieGridActivityFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.movieGridActivityFragment, new MovieGridFragment()).commit();
         // getFragmentManager().beginTransaction().
         // getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefFragment()).commit();
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.lmc.popularmovie.utility.MovieDetails;
 
@@ -48,14 +49,27 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues values= new ContentValues();
         values.put(COLUMN_TITLE,title);
-        values.put(COLUMN_TITLE,moviePoster);
+        values.put(COLUMN_POSTER,moviePoster);
         values.put(COLUMN_OVERVIEW,overview);
         values.put(COLUMN_RATING,userRating);
         values.put(COLUMN_DATE,releaseDate);
         values.put(COLUMN_ID,movieId);
-
+        if(!getMovieWithId(movieId))
         db.insert(TABLE_NAME,null,values);
 
+    }
+
+
+    private boolean getMovieWithId(String id){
+        boolean result=false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res =  db.rawQuery( "select * from moviedetails where movieId="+id, null );
+        if(res.moveToNext()){
+            result=true;
+            Log.d("Lamchith", "Value in DB allready, dont add");
+        }
+        res.close();
+        return  result;
     }
 
 
@@ -65,12 +79,12 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res =  db.rawQuery( "select * from moviedetails", null );
 
-        res.moveToFirst();
+       // res.moveToFirst();
         if(res.getCount()>0){
             list=new ArrayList<MovieDetails>();
 
         }
-        while(!res.isAfterLast ()){
+        while(res.moveToNext()){
 
             details=new MovieDetails();
             details.movieId=res.getInt(res.getColumnIndex(COLUMN_ID));
@@ -80,9 +94,11 @@ public class DBHelper extends SQLiteOpenHelper {
             details.title=res.getString(res.getColumnIndex(COLUMN_TITLE));
             details.userRating=res.getString(res.getColumnIndex(COLUMN_RATING));
 
+            Log.d("Lamchith", "From DB : "+details.toString());
+
             list.add(details);
         }
-
+        res.close();
         return list;
         }
 

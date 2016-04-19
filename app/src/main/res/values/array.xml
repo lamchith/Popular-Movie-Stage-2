@@ -3,11 +3,13 @@
     <string-array name="listArray">
         <item>By most popular</item>
         <item>By highest-rated</item>
+        <item>By Favourite</item>
 
     </string-array>
     <string-array name="listValues">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
 
     </string-array>
 

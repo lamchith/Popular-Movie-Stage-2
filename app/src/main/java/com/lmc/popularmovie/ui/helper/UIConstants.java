@@ -6,6 +6,8 @@ package com.lmc.popularmovie.ui.helper;
 public class UIConstants {
 
     public static final String IMAGE_SIZE = "http://image.tmdb.org/t/p/w185/";
+    // update API key here
+    public static final String API_KEY = "";
 
 
 }

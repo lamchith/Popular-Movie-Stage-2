@@ -26,6 +26,6 @@ public class MovieDetails {
 
 
     public String toString(){
-      return   title+moviePoster+overview+userRating+releaseDate+" : "+movieId;
+      return   title+" : "+moviePoster+" : "+overview +" : "+userRating+" : "+releaseDate+" : "+movieId;
     }
 }

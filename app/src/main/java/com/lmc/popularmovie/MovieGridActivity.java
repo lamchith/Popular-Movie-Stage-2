@@ -7,7 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MovieGridActivity extends AppCompatActivity {
+import com.lmc.popularmovie.utility.MovieApplication;
+
+import java.util.ArrayList;
+
+public class MovieGridActivity extends AppCompatActivity implements MovieGridFragment.OnItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,4 +43,21 @@ public class MovieGridActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(ArrayList<String> movieDetailsList) {
+
+        MovieDetailsFragment detailsFragment= (MovieDetailsFragment)getSupportFragmentManager().findFragmentById(R.id.movieDetailFragment);
+        if(detailsFragment==null){
+
+            Intent intent = new Intent(MovieApplication.context, MovieDetailsActivity.class);
+            intent.putStringArrayListExtra("com.lmc.popularmovie.details", movieDetailsList);
+            //intent.putExtra("Details", detailsArray);
+            startActivity(intent);
+
+        }
+        else{
+
+            detailsFragment.updateContent(movieDetailsList);
+        }
+    }
 }

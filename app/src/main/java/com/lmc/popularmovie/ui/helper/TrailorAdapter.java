@@ -31,7 +31,7 @@ public class TrailorAdapter extends RecyclerView.Adapter<TrailorAdapter.ViewHold
 
         public void onClick(View v){
             final String YOUTUBE = "vnd.youtube://";
-            v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE + mTextView.getText())));
+            v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE + mTextView.getHint())));
 
         }
     }
@@ -60,8 +60,8 @@ public class TrailorAdapter extends RecyclerView.Adapter<TrailorAdapter.ViewHold
         // - replace the contents of the view with that element
 
        MovieTrailorDetails dt= mTrailorList.get(position);
-        holder.mTextView.setText(dt.key);
-
+        holder.mTextView.setText("Trailor "+(position+1));
+        holder.mTextView.setHint(dt.key);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

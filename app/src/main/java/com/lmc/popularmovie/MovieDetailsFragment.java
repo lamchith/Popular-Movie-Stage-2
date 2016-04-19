@@ -13,10 +13,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lmc.popularmovie.db.DBHelper;
+import com.lmc.popularmovie.ui.helper.ReviewAdapter;
 import com.lmc.popularmovie.ui.helper.TrailorAdapter;
 import com.lmc.popularmovie.ui.helper.UIConstants;
 import com.lmc.popularmovie.utility.MovieApplication;
 import com.lmc.popularmovie.utility.MovieTrailorDetails;
+import com.lmc.popularmovie.utility.ParseJsonReview;
 import com.lmc.popularmovie.utility.ParseJsonTrailer;
 import com.squareup.picasso.Picasso;
 import java.io.BufferedInputStream;
@@ -38,12 +40,15 @@ public class MovieDetailsFragment extends Fragment {
 
     ArrayList<String> list = null;
     GetTrailorsTask trailorsTask = null;
+    GetReviewsTask reviewTask = null;
     RecyclerView recyclerViewTrailor=null;
+    RecyclerView recyclerViewReview=null;
     TextView textViewUserRating=null;
     TextView textViewReleaseDate=null;
     TextView textViewOverview=null;
     TextView textViewTitle=null;
     TextView textViewTrailor=null;
+    TextView textViewReview=null;
     Button buttonFavourite=null;
     ImageView imagePoster=null;
 
@@ -63,17 +68,22 @@ public class MovieDetailsFragment extends Fragment {
         textViewTrailor = (TextView) view.findViewById(R.id.textView_trailor);
         buttonFavourite = (Button) view.findViewById(R.id.button_favourite);
         buttonFavourite.setVisibility(View.INVISIBLE);
-
-
+        textViewReview = (TextView) view.findViewById(R.id.textView_review);
         recyclerViewTrailor=(RecyclerView) view.findViewById(R.id.recyclerView_trailor);
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(MovieApplication.context);
+        recyclerViewTrailor.setHasFixedSize(true);
         recyclerViewTrailor.setLayoutManager(layoutManager);
+
+        recyclerViewReview=(RecyclerView) view.findViewById(R.id.recyclerView_review);
+        recyclerViewReview.setHasFixedSize(true);
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(MovieApplication.context);
+        recyclerViewReview.setLayoutManager(layoutManager1);
 
         if (list != null) {
 
             textViewTitle.setText(list.get(0));
-            Picasso.with(MovieApplication.context).load(UIConstants.IMAGE_SIZE + list.get(1)).into(imagePoster);
+            Picasso.with(MovieApplication.context).load(UIConstants.IMAGE_SIZE_POSETR + list.get(1)).into(imagePoster);
             textViewOverview.setText(list.get(2));
             textViewUserRating.setText(list.get(3)+" / 10");
             textViewReleaseDate.setText(list.get(4));
@@ -98,13 +108,21 @@ public class MovieDetailsFragment extends Fragment {
             textViewTrailor.setText("Trailors below");
 
             try {
-                // this is getting executed multiple times
-                // keep the movie api key here
                 trailorsTask = (GetTrailorsTask) new GetTrailorsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+list.get(5)+"/videos?api_key="+ UIConstants.API_KEY));
             } catch (MalformedURLException ex) {
                 Log.e("Lamchith", ex.getMessage());
 
             }
+
+
+            textViewReview.setText("Reviews below");
+            try {
+                reviewTask = (GetReviewsTask) new GetReviewsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+list.get(5)+"/reviews?api_key="+ UIConstants.API_KEY));
+            } catch (MalformedURLException ex) {
+                Log.e("Lamchith", ex.getMessage());
+
+            }
+
 
 
         }
@@ -123,7 +141,7 @@ public class MovieDetailsFragment extends Fragment {
     public void updateContent(final ArrayList<String> movieDetailsList) {
         if (movieDetailsList != null) {
             textViewTitle.setText(movieDetailsList.get(0));
-            Picasso.with(MovieApplication.context).load(UIConstants.IMAGE_SIZE + movieDetailsList.get(1)).into(imagePoster);
+            Picasso.with(MovieApplication.context).load(UIConstants.IMAGE_SIZE_POSETR + movieDetailsList.get(1)).into(imagePoster);
             textViewOverview.setText(movieDetailsList.get(2));
             textViewUserRating.setText(movieDetailsList.get(3)+" / 10");
             textViewReleaseDate.setText(movieDetailsList.get(4));
@@ -150,7 +168,17 @@ public class MovieDetailsFragment extends Fragment {
             try {
                 // this is getting executed multiple times
                 // keep the movie api key here
-                trailorsTask = (GetTrailorsTask) new GetTrailorsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/videos?api_key="));
+                trailorsTask = (GetTrailorsTask) new GetTrailorsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/videos?api_key="+ UIConstants.API_KEY));
+            } catch (MalformedURLException ex) {
+                Log.e("Lamchith", ex.getMessage());
+
+            }
+
+            textViewReview.setText("Reviews below");
+            try {
+                // this is getting executed multiple times
+                // keep the movie api key here
+                reviewTask = (GetReviewsTask) new GetReviewsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/reviews?api_key="+ UIConstants.API_KEY));
             } catch (MalformedURLException ex) {
                 Log.e("Lamchith", ex.getMessage());
 
@@ -202,5 +230,42 @@ public class MovieDetailsFragment extends Fragment {
 
 
         }
+
+
+    private class GetReviewsTask extends AsyncTask<URL, Integer, ArrayList<String>> {
+        public ArrayList<String> list = null;
+
+
+        protected ArrayList<String> doInBackground(URL... urls) {
+
+            ParseJsonReview parseJson = new ParseJsonReview();
+            ArrayList<String> list = null;
+            URL url = null;
+            try {
+                url = urls[0];
+                if (parseJson.isOnline(MovieApplication.context)) {
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                    list = parseJson.parsejson(in);
+
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+
+
+        protected void onPostExecute(final ArrayList<String> list) {
+
+            ReviewAdapter adapter = new ReviewAdapter(list);
+            recyclerViewReview.setAdapter(adapter);
+
+        };
+
+
+    }
 
     }

@@ -67,14 +67,14 @@ public class MovieGridFragment extends Fragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sort = sp.getString("list_preference", "1");
         if (sort.equals("1")) {
-            sortBy = "popularity.desc";
+            sortBy = "popular";
 
         }
         else if(sort.equals("2")) {
-            sortBy = "vote_average.desc";
+            sortBy = "top_rated";
         }
         else {
-            sortBy = "3";
+            sortBy = "DB";
         }
         Log.i("Lamchith", "Value from prefernce is :" + sort);
 
@@ -82,7 +82,7 @@ public class MovieGridFragment extends Fragment {
                 downloadTask = (DownloadTask) new DownloadTask().execute(sortBy);
             }
         else{
-                downloadTask = (DownloadTask) new DownloadTask().execute("DB");
+                downloadTask = (DownloadTask) new DownloadTask().execute(sortBy);
             }
         }
 
@@ -108,7 +108,7 @@ public class MovieGridFragment extends Fragment {
                 else {
                     if (parseJson.isOnline(MovieApplication.context)) {
                         // add the api key here
-                        URL url =new URL("http://api.themoviedb.org/3/discover/movie?sort_by=" + type + "&api_key="+ UIConstants.API_KEY);
+                        URL url =new URL("http://api.themoviedb.org/3/movie/" + type+"?api_key="+ UIConstants.API_KEY);
                         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                         list = parseJson.parsejson(in);
@@ -140,13 +140,7 @@ public class MovieGridFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                // String detailsArray[]=new String[5];
                 MovieDetails details = list.get(i);
-           /* detailsArray[0]=details.title;
-            detailsArray[1]=details.moviePoster;
-            detailsArray[2]=details.overview;
-            detailsArray[3]=details.userRating;
-            detailsArray[4]=details.releaseDate;*/
                 ArrayList<String> arraylist = new ArrayList<String>();
                 arraylist.add(details.title);
                 arraylist.add(details.moviePoster);

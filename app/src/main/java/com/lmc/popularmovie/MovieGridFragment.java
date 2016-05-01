@@ -102,16 +102,17 @@ public class MovieGridFragment extends Fragment {
                 if(type.equals("DB")){
                     DBHelper dbHelper=new DBHelper(MovieApplication.context);
                     list= dbHelper.getMovieDetails();
+                   if(list!=null)
                     Log.i("Lamchith", "From DB" + list.size());
 
                 }
                 else {
                     if (parseJson.isOnline(MovieApplication.context)) {
-                        // add the api key here
                         URL url =new URL("http://api.themoviedb.org/3/movie/" + type+"?api_key="+ UIConstants.API_KEY);
                         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                         list = parseJson.parsejson(in);
+                        if(list!=null)
                         Log.i("Lamchith", "got the list" + list.size());
                     }
                 }
@@ -142,12 +143,12 @@ public class MovieGridFragment extends Fragment {
 
                 MovieDetails details = list.get(i);
                 ArrayList<String> arraylist = new ArrayList<String>();
-                arraylist.add(details.title);
-                arraylist.add(details.moviePoster);
-                arraylist.add(details.overview);
-                arraylist.add(details.userRating);
-                arraylist.add(details.releaseDate);
-                arraylist.add(""+details.movieId);
+                arraylist.add(details.getTitle());
+                arraylist.add(details.getMoviePoster());
+                arraylist.add(details.getOverview());
+                arraylist.add(details.getUserRating());
+                arraylist.add(details.getReleaseDate());
+                arraylist.add(""+details.getMovieId());
 
                 gridItemClickedListener.onItemSelected(arraylist);
 
@@ -186,6 +187,8 @@ public class MovieGridFragment extends Fragment {
 
         public void onItemSelected(ArrayList<String> movieDetailsList);
     }
+
+
 }
 
 

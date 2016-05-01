@@ -2,6 +2,7 @@ package com.lmc.popularmovie;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.lmc.popularmovie.ui.helper.ReviewAdapter;
 import com.lmc.popularmovie.ui.helper.TrailorAdapter;
 import com.lmc.popularmovie.ui.helper.UIConstants;
 import com.lmc.popularmovie.utility.MovieApplication;
+import com.lmc.popularmovie.utility.MovieDetails;
 import com.lmc.popularmovie.utility.MovieTrailorDetails;
 import com.lmc.popularmovie.utility.ParseJsonReview;
 import com.lmc.popularmovie.utility.ParseJsonTrailer;
@@ -267,5 +269,38 @@ public class MovieDetailsFragment extends Fragment {
 
 
     }
+
+    //onRestoreInstanceState()
+
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null){
+            MovieDetails movieDetails=(MovieDetails)savedInstanceState.getParcelable("movieDetailsParcelable");
+            if(movieDetails!=null) {
+                list.set(0, movieDetails.getTitle());
+                list.set(1, movieDetails.getMoviePoster());
+                list.set(2, movieDetails.getOverview());
+                list.set(3, movieDetails.getUserRating());
+                list.set(4, movieDetails.getReleaseDate());
+                list.set(5, "" + movieDetails.getMovieId());
+            }
+
+
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(list!=null) {
+            MovieDetails movieDetails= new MovieDetails(list);
+            outState.putParcelable("movieDetailsParcelable",movieDetails );
+        }
+
+    }
+
 
     }

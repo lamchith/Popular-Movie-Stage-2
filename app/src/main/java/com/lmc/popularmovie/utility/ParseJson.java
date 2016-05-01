@@ -65,20 +65,20 @@ public class ParseJson {
                     String name = reader.nextName();
 
                     if (name.equals("title")) {
-                        movie.title = reader.nextString();
+                        movie.setTitle( reader.nextString());
                     } else if (name.equals("poster_path")) {
-                        movie.moviePoster = reader.nextString();
+                        movie.setMoviePoster( reader.nextString());
                     } else if (name.equals("overview")) {
-                        movie.overview = reader.nextString();
+                        movie.setOverview( reader.nextString());
                     } else if (name.equals("vote_average")) {
-                        movie.userRating = reader.nextString();
+                        movie.setUserRating(reader.nextString());
                     } else if (name.equals("release_date")) {
-                        movie.releaseDate = reader.nextString();
+                        movie.setReleaseDate(reader.nextString());
                     } else if (name.equals("id")) {
+                        movie.setMovieId( reader.nextInt());
+                    } /*else if (name.equals("id")) {
                         movie.movieId = reader.nextInt();
-                    } else if (name.equals("id")) {
-                        movie.movieId = reader.nextInt();
-                    }
+                    }*/
                     else {
                         reader.skipValue();
                     }

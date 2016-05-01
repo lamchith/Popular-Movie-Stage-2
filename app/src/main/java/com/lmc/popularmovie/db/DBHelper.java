@@ -87,12 +87,12 @@ public class DBHelper extends SQLiteOpenHelper {
         while(res.moveToNext()){
 
             details=new MovieDetails();
-            details.movieId=res.getInt(res.getColumnIndex(COLUMN_ID));
-            details.moviePoster=res.getString(res.getColumnIndex(COLUMN_POSTER));
-            details.overview=res.getString(res.getColumnIndex(COLUMN_OVERVIEW));
-            details.releaseDate=res.getString(res.getColumnIndex(COLUMN_DATE));
-            details.title=res.getString(res.getColumnIndex(COLUMN_TITLE));
-            details.userRating=res.getString(res.getColumnIndex(COLUMN_RATING));
+            details.setMovieId(res.getInt(res.getColumnIndex(COLUMN_ID)));
+            details.setMoviePoster(res.getString(res.getColumnIndex(COLUMN_POSTER)));
+            details.setOverview(res.getString(res.getColumnIndex(COLUMN_OVERVIEW)));
+            details.setReleaseDate(res.getString(res.getColumnIndex(COLUMN_DATE)));
+            details.setTitle(res.getString(res.getColumnIndex(COLUMN_TITLE)));
+            details.setUserRating(res.getString(res.getColumnIndex(COLUMN_RATING)));
 
             Log.d("Lamchith", "From DB : "+details.toString());
 

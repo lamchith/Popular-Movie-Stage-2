@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -108,7 +109,16 @@ public class MovieGridFragment extends Fragment {
                 }
                 else {
                     if (parseJson.isOnline(MovieApplication.context)) {
-                        URL url =new URL("http://api.themoviedb.org/3/movie/" + type+"?api_key="+ UIConstants.API_KEY);
+                        Uri.Builder builder=new Uri.Builder();
+                        builder.scheme(UIConstants.HTTPS)
+                                .authority(UIConstants.AUTHORITY_API_THE_MOVIEDB_ORG)
+                                .appendPath(UIConstants.API_PATH)
+                                .appendPath(UIConstants.API_PATH_MOVIE)
+                                .appendPath(type)
+                                .appendQueryParameter(UIConstants.QUERY_PARAMATER_API_KEY,UIConstants.API_KEY);
+                        String urlString=builder.build().toString();
+                        Log.i("Lamchith", "URL for API request" +urlString);
+                        URL url =new URL(urlString);
                         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                         list = parseJson.parsejson(in);

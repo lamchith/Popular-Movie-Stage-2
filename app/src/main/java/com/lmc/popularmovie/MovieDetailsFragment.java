@@ -1,5 +1,6 @@
 package com.lmc.popularmovie;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -166,11 +167,21 @@ public class MovieDetailsFragment extends Fragment {
             });
             textViewTrailor.setText("Trailors below");
 
-
+            Uri.Builder uriBuilder=null;
             try {
+                uriBuilder=new Uri.Builder();
+                String uriString=uriBuilder.scheme(UIConstants.HTTPS)
+                        .authority(UIConstants.AUTHORITY_API_THE_MOVIEDB_ORG)
+                        .appendPath(UIConstants.API_PATH)
+                        .appendPath(UIConstants.API_PATH_MOVIE)
+                        .appendPath(movieDetailsList.get(5))
+                        .appendPath(UIConstants.API_PATH_VIDEOS)
+                        .appendQueryParameter(UIConstants.QUERY_PARAMATER_API_KEY,UIConstants.API_KEY).build().toString();
+
                 // this is getting executed multiple times
                 // keep the movie api key here
-                trailorsTask = (GetTrailorsTask) new GetTrailorsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/videos?api_key="+ UIConstants.API_KEY));
+                trailorsTask = (GetTrailorsTask) new GetTrailorsTask().execute(new URL(uriString));
+                        //new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/videos?api_key="+ UIConstants.API_KEY));
             } catch (MalformedURLException ex) {
                 Log.e("Lamchith", ex.getMessage());
 
@@ -180,7 +191,15 @@ public class MovieDetailsFragment extends Fragment {
             try {
                 // this is getting executed multiple times
                 // keep the movie api key here
-                reviewTask = (GetReviewsTask) new GetReviewsTask().execute(new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/reviews?api_key="+ UIConstants.API_KEY));
+                String uriString=uriBuilder.scheme(UIConstants.HTTPS)
+                        .authority(UIConstants.AUTHORITY_API_THE_MOVIEDB_ORG)
+                        .appendPath(UIConstants.API_PATH)
+                        .appendPath(UIConstants.API_PATH_MOVIE)
+                        .appendPath(movieDetailsList.get(5))
+                        .appendPath(UIConstants.API_PATH_REVIEWS)
+                        .appendQueryParameter(UIConstants.QUERY_PARAMATER_API_KEY,UIConstants.API_KEY).build().toString();
+                reviewTask = (GetReviewsTask) new GetReviewsTask().execute(new URL(uriString));
+                        //new URL("http://api.themoviedb.org/3/movie/"+movieDetailsList.get(5)+"/reviews?api_key="+ UIConstants.API_KEY));
             } catch (MalformedURLException ex) {
                 Log.e("Lamchith", ex.getMessage());
 
